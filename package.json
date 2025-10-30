@@ -1,0 +1,76 @@
+{
+  "name": "dutch-queen-mainband-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "validate-design-system": "node scripts/validate-design-system.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "analyze": "cross-env ANALYZE=true next build",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.0",
+    "lucide-react": "^0.525.0",
+    "next": "^15.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.15.0",
+    "@next/bundle-analyzer": "^15.0.0",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.4.0",
+    "@testing-library/react": "^15.0.0",
+    "@testing-library/user-event": "^14.5.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "^15.0.0",
+    "glob": "^11.0.0",
+    "husky": "^9.1.0",
+    "jsdom": "^24.1.0",
+    "lint-staged": "^15.2.0",
+    "postcss": "^8.4.0",
+    "prettier": "^3.3.0",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^4",
+    "tailwindcss-animate": "^1.0.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=8.0.0"
+  }
+}

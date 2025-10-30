@@ -1,0 +1,10 @@
+{
+  "upcoming": [],
+  "past": [],
+  "settings": {
+    "showPastShows": true,
+    "maxUpcomingDisplay": 10,
+    "maxPastDisplay": 5,
+    "autoArchiveAfterDays": 7
+  }
+}
