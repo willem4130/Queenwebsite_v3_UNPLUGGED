@@ -12,6 +12,7 @@ import {
   getConfig,
   loadConfig,
   getBandContent,
+  getShowsData,
   getMediaPaths,
   getConfiguredClasses,
   getAnimationClasses,
@@ -143,6 +144,37 @@ export function useMediaPaths() {
       logos: {
         main: "/logo.png",
         icon: "/favicon.ico",
+      },
+    };
+  }
+}
+
+/**
+ * Hook for shows/tour dates data
+ */
+export function useShows() {
+  try {
+    const shows = getShowsData();
+    return {
+      upcoming: shows.upcoming || [],
+      past: shows.past || [],
+      settings: shows.settings || {
+        showPastShows: true,
+        maxUpcomingDisplay: 10,
+        maxPastDisplay: 5,
+        autoArchiveAfterDays: 7,
+      },
+    };
+  } catch (error) {
+    console.error("Error loading shows data:", error);
+    return {
+      upcoming: [],
+      past: [],
+      settings: {
+        showPastShows: true,
+        maxUpcomingDisplay: 10,
+        maxPastDisplay: 5,
+        autoArchiveAfterDays: 7,
       },
     };
   }

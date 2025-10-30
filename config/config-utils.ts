@@ -9,8 +9,9 @@
  */
 
 import { BandWebsiteConfig, defaultConfig, genrePresets } from "./band.config";
-import bandProfile from "../content/bands/the-dutch-queen/band-profile.json";
-import aboutData from "../content/bands/the-dutch-queen/data/about.json";
+import bandProfile from "../content/bands/the-dutch-queen-unplugged/band-profile.json";
+import aboutData from "../content/bands/the-dutch-queen-unplugged/data/about.json";
+import showsData from "../content/bands/the-dutch-queen-unplugged/data/shows.json";
 
 // Re-export types for convenience
 export type { BandWebsiteConfig };
@@ -322,6 +323,36 @@ export function getBandContent() {
       },
       social: config.content.social || {},
       contact: config.content.contact || { email: "" },
+    };
+  }
+}
+
+/**
+ * Get shows/tour dates data
+ */
+export function getShowsData() {
+  try {
+    return {
+      upcoming: showsData.upcoming || [],
+      past: showsData.past || [],
+      settings: showsData.settings || {
+        showPastShows: true,
+        maxUpcomingDisplay: 10,
+        maxPastDisplay: 5,
+        autoArchiveAfterDays: 7,
+      },
+    };
+  } catch (error) {
+    console.error("Error loading shows data:", error);
+    return {
+      upcoming: [],
+      past: [],
+      settings: {
+        showPastShows: true,
+        maxUpcomingDisplay: 10,
+        maxPastDisplay: 5,
+        autoArchiveAfterDays: 7,
+      },
     };
   }
 }

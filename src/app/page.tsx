@@ -21,7 +21,7 @@ import {
 } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
-import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
+import { useBandContent, useMediaPaths, useShows } from "@/hooks/useConfig";
 import { throttle } from "@/lib/performance-utils";
 
 // Lazy load AnimatePresence for lightbox (only loads when user clicks gallery)
@@ -50,6 +50,7 @@ function HomeContent() {
   // Configuration hooks
   const content = useBandContent();
   const media = useMediaPaths();
+  const { upcoming: upcomingShows } = useShows();
 
   // Detect desktop for bento grid patterns and check motion preferences
   useEffect(() => {
@@ -192,133 +193,8 @@ function HomeContent() {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // All tour dates
-  const upcomingShows = [
-    {
-      date: "Dec 4, 2025",
-      time: "20:30",
-      venue: "Vorstin",
-      city: "Hilversum",
-      status: "tickets",
-      ticketUrl: "https://vorstin.stager.co/shop/default/events/111493445",
-    },
-    {
-      date: "Dec 6, 2025",
-      time: "20:30",
-      venue: "Boerderij",
-      city: "Zoetermeer",
-      status: "tickets",
-      ticketUrl: "https://poppodiumboerderij.nl/programma/thedutchqueen2025/",
-    },
-    {
-      date: "Dec 11, 2025",
-      time: "20:30",
-      venue: "Victorie",
-      city: "Alkmaar",
-      status: "tickets",
-      ticketUrl: "https://www.podiumvictorie.nl/programma/the-dutch-queen-2025",
-    },
-    {
-      date: "Dec 12, 2025",
-      time: "20:15",
-      venue: "Vereeniging",
-      city: "Nijmegen",
-      status: "tickets",
-      ticketUrl:
-        "https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jahr-bohemian-rhapsody/the-dutch-queen",
-    },
-    {
-      date: "Dec 13, 2025",
-      time: "20:15",
-      venue: "Dru fabriek",
-      city: "Ulft",
-      status: "tickets",
-      ticketUrl:
-        "https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen",
-    },
-    {
-      date: "Dec 18, 2025",
-      time: "20:15",
-      venue: "Metropool",
-      city: "Enschede",
-      status: "tickets",
-      ticketUrl: "https://metropool.nl/agenda/the-dutch-queen-18-dec",
-    },
-    {
-      date: "Dec 19, 2025",
-      time: "20:15",
-      venue: "Lantaarn",
-      city: "Hellendoorn",
-      status: "tickets",
-      ticketUrl:
-        "https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06",
-    },
-    {
-      date: "Dec 20, 2025",
-      time: "19:30",
-      venue: "Hedon",
-      city: "Zwolle",
-      status: "tickets",
-      ticketUrl: "https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen",
-    },
-    {
-      date: "Dec 28, 2025",
-      time: "20:30",
-      venue: "Effenaar",
-      city: "Eindhoven",
-      status: "tickets",
-      ticketUrl:
-        "https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody",
-    },
-    {
-      date: "Dec 29, 2025",
-      time: "20:30",
-      venue: "Oosterpoort",
-      city: "Groningen",
-      status: "tickets",
-      ticketUrl: "https://www.spotgroningen.nl/programma/the-dutch-queen-3/",
-    },
-    {
-      date: "Dec 30, 2025",
-      time: "20:30",
-      venue: "Mezz",
-      city: "Breda",
-      status: "tickets",
-      ticketUrl: "https://www.mezz.nl/programma/the-dutch-queen/",
-    },
-    {
-      date: "Jan 2, 2026",
-      time: "20:30",
-      venue: "Groene Engel",
-      city: "Oss",
-      status: "tickets",
-      ticketUrl: "https://groene-engel.stager.co/web/tickets/111471691",
-    },
-    {
-      date: "Jan 3, 2026",
-      time: "20:30",
-      venue: "Grenswerk",
-      city: "Venlo",
-      status: "tickets",
-      ticketUrl: "https://www.grenswerk.nl/agenda/the-dutch-queen///",
-    },
-    {
-      date: "Jan 9, 2026",
-      time: "20:30",
-      venue: "Gigant",
-      city: "Apeldoorn",
-      status: "tickets",
-      ticketUrl: "https://www.gigant.nl/concert/the-dutch-queen",
-    },
-    {
-      date: "Jan 10, 2026",
-      time: "20:30",
-      venue: "Bibelot",
-      city: "Dordrecht",
-      status: "tickets",
-      ticketUrl: "https://bibelot.stager.co/web/tickets/111500178",
-    },
-  ];
+  // Gallery images
+  const galleryImages = media.gallery.map((path) => `/gallery/${path}`);
 
   return (
     <div className="relative w-full bg-black">
