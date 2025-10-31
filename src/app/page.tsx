@@ -85,7 +85,6 @@ function HomeContent() {
   const { scrollYProgress: showsProgress } = useScroll({
     target: showsRef,
     offset: ["start end", "end start"],
-    layoutEffect: false,
   });
   const showsBgY = useTransform(showsProgress, [0, 1], [150, -150]);
   const showsOpacity = useTransform(
@@ -104,7 +103,6 @@ function HomeContent() {
   const { scrollYProgress: galleryProgress } = useScroll({
     target: galleryRef,
     offset: ["start end", "end start"],
-    layoutEffect: false,
   });
   const galleryOpacity = useTransform(
     galleryProgress,
@@ -126,7 +124,6 @@ function HomeContent() {
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
-    layoutEffect: false,
   });
   const aboutBgY = useTransform(aboutProgress, [0, 1], [350, -350]);
   const aboutBgScale = useTransform(aboutProgress, [0, 0.3], [0.8, 1.1]);
@@ -192,9 +189,6 @@ function HomeContent() {
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
-
-  // Gallery images
-  const galleryImages = media.gallery.map((path) => `/gallery/${path}`);
 
   return (
     <div className="relative w-full bg-black">
