@@ -29,15 +29,45 @@ const AnimatePresence = lazy(() =>
   import("framer-motion").then((mod) => ({ default: mod.AnimatePresence }))
 );
 
-const bentoPatterns = [
-  { row: "span 2", col: "span 2" },
-  { row: "span 1", col: "span 1" },
-  { row: "span 1", col: "span 2" },
-  { row: "span 2", col: "span 1" },
-  { row: "span 1", col: "span 1" },
-  { row: "span 2", col: "span 2" },
-  { row: "span 1", col: "span 2" },
-  { row: "span 1", col: "span 1" },
+// Image orientations (portrait = taller than wide, landscape = wider than tall)
+const imageOrientations = [
+  "portrait", // 1: 800x1200
+  "landscape", // 2: 1200x800
+  "portrait", // 3: 799x1200
+  "landscape", // 4: 1200x800
+  "portrait", // 5: 800x1200
+  "portrait", // 6: 800x1200
+  "portrait", // 7: 800x1200
+  "landscape", // 8: 1200x800
+  "portrait", // 9: 800x1200
+  "portrait", // 10: 800x1200
+  "portrait", // 11: 800x1200
+  "portrait", // 12: 800x1200
+  "landscape", // 13: 1200x800
+  "landscape", // 14: 1200x800
+  "landscape", // 15: 1200x800
+  "portrait", // 16: 800x1200
+  "portrait", // 17: 800x1200
+  "landscape", // 18: 1200x800
+  "landscape", // 19: 1200x800
+  "landscape", // 20: 1200x800
+  "landscape", // 21: 1200x800
+  "landscape", // 22: 1200x800
+  "landscape", // 23: 1200x800
+];
+
+// Pattern presets for portrait (tall) images
+const portraitPatterns = [
+  { row: "span 2", col: "span 1" }, // Tall single
+  { row: "span 2", col: "span 2" }, // Tall double width
+  { row: "span 1", col: "span 1" }, // Small square
+];
+
+// Pattern presets for landscape (wide) images
+const landscapePatterns = [
+  { row: "span 1", col: "span 2" }, // Wide single
+  { row: "span 2", col: "span 2" }, // Large square
+  { row: "span 1", col: "span 1" }, // Small square
 ];
 
 function HomeContent() {
@@ -146,7 +176,10 @@ function HomeContent() {
   );
 
   const getBentoPattern = (index: number) => {
-    return bentoPatterns[index % bentoPatterns.length];
+    const orientation = imageOrientations[index] || "portrait";
+    const patterns =
+      orientation === "portrait" ? portraitPatterns : landscapePatterns;
+    return patterns[index % patterns.length];
   };
 
   const handleImageClick = (image: string, index: number) => {
@@ -450,7 +483,7 @@ function HomeContent() {
                           fill
                           loading={i < 4 ? "eager" : "lazy"}
                           quality={isDesktop ? 80 : 70}
-                          className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
+                          className="scale-110 object-cover transition-transform duration-500 group-hover:scale-100"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           draggable={false}
                         />
