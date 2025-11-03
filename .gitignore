@@ -59,3 +59,4 @@ website-comparison-report/
 /public/videos/*.mp4.backup
 /public/videos/*.webm.backup
 /video-originals/
+/public/videos/source/
