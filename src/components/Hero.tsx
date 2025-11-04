@@ -123,7 +123,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     const handleError = (e: Event) => {
       console.error("❌ Video loading error:", e);
       setVideoReady(false);
-      setShowPoster(false); // Hide poster on error to show fallback
+      setShowPoster(true); // Show poster on error as fallback
     };
 
     video.addEventListener("canplay", handleCanPlay);
@@ -246,6 +246,13 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 muted
                 playsInline
                 preload="metadata"
+                poster={
+                  deviceType === "mobile"
+                    ? "/videos/poster-mobile.jpg"
+                    : deviceType === "tablet"
+                      ? "/videos/poster-desktop.jpg"
+                      : "/videos/poster-desktop.jpg"
+                }
                 className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
               >
                 {/* WebM format first (65% smaller, better compression) */}
@@ -295,9 +302,9 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             </div>
           )}
 
-          {/* Poster image - only show on desktop and tablet, NOT on mobile */}
+          {/* Poster image overlay - shows on error or when video is loading */}
           <AnimatePresence>
-            {showPoster && deviceType !== "mobile" && (
+            {showPoster && (
               <motion.div
                 key="poster"
                 className="absolute inset-0 z-20"
@@ -318,8 +325,8 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={
-                    deviceType === "tablet"
-                      ? "/videos/poster-desktop.jpg"
+                    deviceType === "mobile"
+                      ? "/videos/poster-mobile.jpg"
                       : "/videos/poster-desktop.jpg"
                   }
                   alt="The Dutch Queen"
