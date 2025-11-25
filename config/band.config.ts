@@ -222,8 +222,8 @@ export const defaultConfig: BandWebsiteConfig = {
       phone: "+31 6 5589 5579",
     },
     social: {
-      facebook: "https://www.facebook.com/thedutchqueen",
-      instagram: "https://www.instagram.com/thedutchqueen/",
+      facebook: "https://www.facebook.com/profile.php?id=61556052640523",
+      instagram: "https://www.instagram.com/thedutchqueenunplugged/",
       youtube: "https://youtube.com/watch?v=xGIhqcitNIU&feature=youtu.be",
     },
     seo: {
