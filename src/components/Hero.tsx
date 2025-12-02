@@ -232,6 +232,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             <>
               {/* Video with WebM and MP4 sources for optimal performance */}
               <video
+                key={`${deviceType}-${isIOS ? 'ios' : 'other'}`}
                 ref={videoRef}
                 autoPlay
                 loop
