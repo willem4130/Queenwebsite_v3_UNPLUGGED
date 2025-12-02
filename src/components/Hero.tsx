@@ -234,10 +234,10 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 preload="metadata"
                 poster={
                   deviceType === "mobile"
-                    ? "/videos/poster-mobile.jpg?v=20251104"
+                    ? "/videos/poster-mobile.jpg?v=20251201"
                     : deviceType === "tablet"
-                      ? "/videos/poster-desktop.jpg?v=20251104"
-                      : "/videos/poster-desktop.jpg?v=20251104"
+                      ? "/videos/poster-tablet.jpg?v=20251201"
+                      : "/videos/poster-desktop.jpg?v=20251201"
                 }
                 className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
               >
