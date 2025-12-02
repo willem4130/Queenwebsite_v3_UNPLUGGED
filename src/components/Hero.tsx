@@ -21,6 +21,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [showPoster, setShowPoster] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(true);
+  const [isIOS, setIsIOS] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Detect network quality and Save Data mode
@@ -47,7 +48,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     setShouldLoadVideo(true);
   }, []);
 
-  // Detect device type on mount (client-side only)
+  // Detect device type and iOS on mount (client-side only)
   useEffect(() => {
     const width = window.innerWidth;
     if (width < 768) {
@@ -57,6 +58,11 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     } else {
       setDeviceType("desktop");
     }
+
+    // Detect iOS/iPadOS
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+    setIsIOS(isIOSDevice);
   }, []);
 
   // Ensure scroll is never blocked on mount
@@ -241,18 +247,20 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 }
                 className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
               >
-                {/* WebM format first (65% smaller, better compression) */}
-                <source
-                  src={
-                    deviceType === "mobile"
-                      ? "/videos/hero-mobile.webm?v=20251202"
-                      : deviceType === "tablet"
-                        ? "/videos/hero-tablet.webm?v=20251202"
-                        : "/videos/hero-desktop.webm?v=20251202"
-                  }
-                  type="video/webm"
-                />
-                {/* MP4 fallback for older browsers */}
+                {/* WebM format first (65% smaller, better compression) - Skip on iOS due to poor support */}
+                {!isIOS && (
+                  <source
+                    src={
+                      deviceType === "mobile"
+                        ? "/videos/hero-mobile.webm?v=20251202"
+                        : deviceType === "tablet"
+                          ? "/videos/hero-tablet.webm?v=20251202"
+                          : "/videos/hero-desktop.webm?v=20251202"
+                    }
+                    type="video/webm"
+                  />
+                )}
+                {/* MP4 for iOS and fallback for other browsers */}
                 <source
                   src={
                     deviceType === "mobile"
