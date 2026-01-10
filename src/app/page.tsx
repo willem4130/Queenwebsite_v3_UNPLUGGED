@@ -104,22 +104,31 @@ function HomeContent() {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash === "#kerkshows") {
-        // Kerkentour 2026 starts May 8, 2026 - scroll to first show on or after this date
+        // Kerkentour 2026 starts May 8, 2026
         const kerkentourStart = new Date(2026, 4, 8); // May 8, 2026
         setTimeout(() => {
-          const targetShow = upcomingShows.find((show) => {
-            const showDate = parseDutchDate(show.date);
-            return showDate && showDate >= kerkentourStart;
-          });
-          if (targetShow) {
-            const showElement = document.getElementById(getShowId(targetShow));
-            if (showElement) {
-              showElement.scrollIntoView({ behavior: "smooth", block: "start" });
-              return;
+          // 1. Scroll page so "Shows" section is at top of viewport
+          const showsSection = document.getElementById("shows");
+          showsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          // 2. After page scroll, scroll the inner shows list to the target show
+          setTimeout(() => {
+            const targetShow = upcomingShows.find((show) => {
+              const showDate = parseDutchDate(show.date);
+              return showDate && showDate >= kerkentourStart;
+            });
+            if (targetShow) {
+              const showsList = document.getElementById("shows-list");
+              const showElement = document.getElementById(getShowId(targetShow));
+              if (showsList && showElement) {
+                // Calculate offset within the scrollable container
+                const containerRect = showsList.getBoundingClientRect();
+                const elementRect = showElement.getBoundingClientRect();
+                const scrollOffset = elementRect.top - containerRect.top + showsList.scrollTop;
+                showsList.scrollTo({ top: scrollOffset, behavior: "smooth" });
+              }
             }
-          }
-          // Fallback to shows section
-          document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
+          }, 500); // Wait for page scroll to complete
         }, 300);
       } else if (hash === "#shows") {
         setTimeout(() => {
@@ -358,7 +367,7 @@ function HomeContent() {
           </div>
 
           {/* Shows List - Scrollable */}
-          <div className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
+          <div id="shows-list" className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
             <div className="mx-auto max-w-6xl space-y-4 pb-24">
               {upcomingShows.map((show, index) => (
                 <motion.div
