@@ -85,21 +85,26 @@ function HomeContent() {
     return `show-${dateSlug}`;
   };
 
-  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to Dordrecht show)
+  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to first church show)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash === "#kerkshows") {
-        // Find the Dordrecht show (8 mei 2026) and scroll to it
+        // Find the first show with "kerk" in the venue name and scroll to it
         // Wait for shows to load and DOM to be ready
         setTimeout(() => {
-          const dordrechtShow = document.getElementById("show-8-mei");
-          if (dordrechtShow) {
-            dordrechtShow.scrollIntoView({ behavior: "smooth", block: "start" });
-          } else {
-            // Fallback to shows section if specific show not found
-            document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
+          const firstKerkShow = upcomingShows.find((show) =>
+            show.venue.toLowerCase().includes("kerk")
+          );
+          if (firstKerkShow) {
+            const showElement = document.getElementById(getShowId(firstKerkShow));
+            if (showElement) {
+              showElement.scrollIntoView({ behavior: "smooth", block: "start" });
+              return;
+            }
           }
+          // Fallback to shows section if no church show found
+          document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
         }, 300);
       } else if (hash === "#shows") {
         setTimeout(() => {
@@ -108,13 +113,13 @@ function HomeContent() {
       }
     };
 
-    // Check on mount
+    // Check on mount and when shows data loads
     handleHashChange();
 
     // Listen for hash changes (e.g., user clicks link)
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+  }, [upcomingShows]);
 
   // Analytics tracking
   const {
