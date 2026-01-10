@@ -85,25 +85,40 @@ function HomeContent() {
     return `show-${dateSlug}`;
   };
 
-  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to first church show)
+  // Parse Dutch date string like "8 mei, 2026" to Date object
+  const parseDutchDate = (dateStr: string): Date | null => {
+    const months: Record<string, number> = {
+      jan: 0, feb: 1, mrt: 2, apr: 3, mei: 4, jun: 5,
+      jul: 6, aug: 7, sep: 8, okt: 9, nov: 10, dec: 11,
+    };
+    const match = dateStr.match(/(\d+)\s+(\w+),?\s*(\d{4})/);
+    if (!match) return null;
+    const [, day, monthStr, year] = match;
+    const month = months[monthStr.toLowerCase().slice(0, 3)];
+    if (month === undefined) return null;
+    return new Date(parseInt(year), month, parseInt(day));
+  };
+
+  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to Kerkentour start)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash === "#kerkshows") {
-        // Find the first show with "kerk" in the venue name and scroll to it
-        // Wait for shows to load and DOM to be ready
+        // Kerkentour 2026 starts May 8, 2026 - scroll to first show on or after this date
+        const kerkentourStart = new Date(2026, 4, 8); // May 8, 2026
         setTimeout(() => {
-          const firstKerkShow = upcomingShows.find((show) =>
-            show.venue.toLowerCase().includes("kerk")
-          );
-          if (firstKerkShow) {
-            const showElement = document.getElementById(getShowId(firstKerkShow));
+          const targetShow = upcomingShows.find((show) => {
+            const showDate = parseDutchDate(show.date);
+            return showDate && showDate >= kerkentourStart;
+          });
+          if (targetShow) {
+            const showElement = document.getElementById(getShowId(targetShow));
             if (showElement) {
               showElement.scrollIntoView({ behavior: "smooth", block: "start" });
               return;
             }
           }
-          // Fallback to shows section if no church show found
+          // Fallback to shows section
           document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
         }, 300);
       } else if (hash === "#shows") {
