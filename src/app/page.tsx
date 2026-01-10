@@ -97,9 +97,10 @@ function HomeContent() {
 
           // 2. After page scroll, scroll the inner shows list to first "kerk" venue
           setTimeout(() => {
-            const firstKerkShow = upcomingShows.find((show) =>
-              show.venue.toLowerCase().includes("kerk")
-            );
+            const firstKerkShow = upcomingShows.find((show) => {
+              const venue = show.venue.toLowerCase();
+              return venue.includes("kerk") || venue.includes("kapel");
+            });
             if (firstKerkShow) {
               const showsList = document.getElementById("shows-list");
               const showElement = document.getElementById(getShowId(firstKerkShow));
