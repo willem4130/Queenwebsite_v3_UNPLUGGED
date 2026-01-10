@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Volume2, VolumeX } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { throttle } from "@/lib/performance-utils";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface HeroProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -14,6 +15,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [hasAudio, setHasAudio] = useState(true); // Assume true, our videos have audio
+  const { trackVideoPlay } = useAnalytics();
 
   const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
     "desktop"
@@ -202,6 +204,12 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
 
     const video = videoRef.current;
     const newMutedState = !isMuted;
+
+    // Track video interaction
+    trackVideoPlay({
+      action: newMutedState ? "mute" : "unmute",
+      videoType: "hero",
+    });
 
     video.muted = newMutedState;
     video.volume = volume;

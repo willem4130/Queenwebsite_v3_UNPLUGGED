@@ -21,7 +21,8 @@ import {
 } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
-import { useBandContent, useGallery, useShows } from "@/hooks/useConfig";
+import { useBandContentAsync, useGallery, useShows } from "@/hooks/useConfig";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { throttle } from "@/lib/performance-utils";
 
 // Lazy load AnimatePresence for lightbox (only loads when user clicks gallery)
@@ -73,10 +74,54 @@ function HomeContent() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Configuration hooks
-  const content = useBandContent();
+  // Configuration hooks - use async version to get live CMS data
+  const { content } = useBandContentAsync();
   const { images: galleryImages, loading: galleryLoading } = useGallery();
   const { upcoming: upcomingShows } = useShows();
+
+  // Helper to create a URL-safe ID from show date and venue
+  const getShowId = (show: { date: string; venue: string }) => {
+    const dateSlug = show.date.split(",")[0].toLowerCase().replace(/\s+/g, "-");
+    return `show-${dateSlug}`;
+  };
+
+  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to Dordrecht show)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === "#kerkshows") {
+        // Find the Dordrecht show (8 mei 2026) and scroll to it
+        // Wait for shows to load and DOM to be ready
+        setTimeout(() => {
+          const dordrechtShow = document.getElementById("show-8-mei");
+          if (dordrechtShow) {
+            dordrechtShow.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            // Fallback to shows section if specific show not found
+            document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300);
+      } else if (hash === "#shows") {
+        setTimeout(() => {
+          document.getElementById("shows")?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    };
+
+    // Check on mount
+    handleHashChange();
+
+    // Listen for hash changes (e.g., user clicks link)
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Analytics tracking
+  const {
+    trackShowClick,
+    trackGalleryImageView,
+    trackLightboxNavigate,
+  } = useAnalytics();
 
   // Detect desktop for bento grid patterns and check motion preferences
   useEffect(() => {
@@ -186,12 +231,18 @@ function HomeContent() {
   };
 
   const handleImageClick = (image: GalleryImage, index: number) => {
+    trackGalleryImageView({
+      imageIndex: index,
+      imageSrc: image.src,
+      context: "grid",
+    });
     setSelectedImage(image.src);
     setSelectedIndex(index);
   };
 
   const navigateImage = useCallback(
     (dir: "prev" | "next") => {
+      trackLightboxNavigate({ direction: dir, imageIndex: selectedIndex });
       setDirection(dir);
       const newIndex =
         dir === "next"
@@ -201,7 +252,7 @@ function HomeContent() {
       setSelectedIndex(newIndex);
       setSelectedImage(galleryImages[newIndex]?.src || null);
     },
-    [selectedIndex, galleryImages]
+    [selectedIndex, galleryImages, trackLightboxNavigate]
   );
 
   // Keyboard navigation for lightbox
@@ -292,6 +343,7 @@ function HomeContent() {
               {upcomingShows.map((show, index) => (
                 <motion.div
                   key={index}
+                  id={getShowId(show)}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{
@@ -306,6 +358,15 @@ function HomeContent() {
                       href={show.ticketUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        trackShowClick({
+                          venue: show.venue,
+                          date: show.date,
+                          city: show.city,
+                          status: "sold-out",
+                          ticketUrl: show.ticketUrl,
+                        })
+                      }
                       className="block cursor-pointer rounded-lg border border-white/10 bg-black/70 p-6 opacity-60 backdrop-blur-md transition-all duration-200 ease-in-out hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-gray-500/50"
                     >
                       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -348,6 +409,15 @@ function HomeContent() {
                       href={show.ticketUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        trackShowClick({
+                          venue: show.venue,
+                          date: show.date,
+                          city: show.city,
+                          status: "available",
+                          ticketUrl: show.ticketUrl,
+                        })
+                      }
                       className="group block cursor-pointer rounded-lg border border-white/10 bg-black/70 p-6 backdrop-blur-md transition-all duration-200 ease-in-out hover:border-emerald-500/60 hover:bg-black/80 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 active:scale-[0.99] active:border-emerald-500/60"
                     >
                       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -606,7 +676,10 @@ function HomeContent() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-8"
-              onClick={() => setSelectedImage(null)}
+              onClick={() => {
+                trackLightboxNavigate({ direction: "close", imageIndex: selectedIndex });
+                setSelectedImage(null);
+              }}
             >
               <div
                 className="relative h-full max-h-[85vh] w-full max-w-5xl"
@@ -669,7 +742,10 @@ function HomeContent() {
                 {/* Close button */}
                 <button
                   className="absolute -top-12 right-0 p-2 text-white transition-colors hover:text-amber-400"
-                  onClick={() => setSelectedImage(null)}
+                  onClick={() => {
+                    trackLightboxNavigate({ direction: "close", imageIndex: selectedIndex });
+                    setSelectedImage(null);
+                  }}
                 >
                   <X className="h-6 w-6" />
                 </button>
