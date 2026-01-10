@@ -85,41 +85,24 @@ function HomeContent() {
     return `show-${dateSlug}`;
   };
 
-  // Parse Dutch date string like "8 mei, 2026" to Date object
-  const parseDutchDate = (dateStr: string): Date | null => {
-    const months: Record<string, number> = {
-      jan: 0, feb: 1, mrt: 2, apr: 3, mei: 4, jun: 5,
-      jul: 6, aug: 7, sep: 8, okt: 9, nov: 10, dec: 11,
-    };
-    const match = dateStr.match(/(\d+)\s+(\w+),?\s*(\d{4})/);
-    if (!match) return null;
-    const [, day, monthStr, year] = match;
-    const month = months[monthStr.toLowerCase().slice(0, 3)];
-    if (month === undefined) return null;
-    return new Date(parseInt(year), month, parseInt(day));
-  };
-
-  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to Kerkentour start)
+  // Detect URL hash on mount for special views (e.g., /#kerkshows scrolls to first church show)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash === "#kerkshows") {
-        // Kerkentour 2026 starts May 8, 2026
-        const kerkentourStart = new Date(2026, 4, 8); // May 8, 2026
         setTimeout(() => {
           // 1. Scroll page so "Shows" section is at top of viewport
           const showsSection = document.getElementById("shows");
           showsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 
-          // 2. After page scroll, scroll the inner shows list to the target show
+          // 2. After page scroll, scroll the inner shows list to first "kerk" venue
           setTimeout(() => {
-            const targetShow = upcomingShows.find((show) => {
-              const showDate = parseDutchDate(show.date);
-              return showDate && showDate >= kerkentourStart;
-            });
-            if (targetShow) {
+            const firstKerkShow = upcomingShows.find((show) =>
+              show.venue.toLowerCase().includes("kerk")
+            );
+            if (firstKerkShow) {
               const showsList = document.getElementById("shows-list");
-              const showElement = document.getElementById(getShowId(targetShow));
+              const showElement = document.getElementById(getShowId(firstKerkShow));
               if (showsList && showElement) {
                 // Calculate offset within the scrollable container
                 const containerRect = showsList.getBoundingClientRect();
