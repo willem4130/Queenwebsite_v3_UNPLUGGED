@@ -261,10 +261,10 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                   <source
                     src={
                       deviceType === "mobile"
-                        ? "/videos/hero-mobile.webm?v=20251202"
+                        ? "/videos/hero-mobile.webm?v=20260127"
                         : deviceType === "tablet"
-                          ? "/videos/hero-tablet.webm?v=20251202"
-                          : "/videos/hero-desktop.webm?v=20251202"
+                          ? "/videos/hero-tablet.webm?v=20260127"
+                          : "/videos/hero-desktop.webm?v=20260127"
                     }
                     type="video/webm"
                   />
@@ -273,10 +273,10 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 <source
                   src={
                     deviceType === "mobile"
-                      ? "/videos/hero-mobile.mp4?v=20251202"
+                      ? "/videos/hero-mobile.mp4?v=20260127"
                       : deviceType === "tablet"
-                        ? "/videos/hero-tablet.mp4?v=20251202"
-                        : "/videos/hero-desktop.mp4?v=20251202"
+                        ? "/videos/hero-tablet.mp4?v=20260127"
+                        : "/videos/hero-desktop.mp4?v=20260127"
                   }
                   type="video/mp4"
                 />
