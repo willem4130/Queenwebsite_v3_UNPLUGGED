@@ -18,7 +18,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const { trackVideoPlay } = useAnalytics();
 
   const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
-    "desktop"
+    "desktop",
   );
   const [showPoster, setShowPoster] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
@@ -62,7 +62,8 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     }
 
     // Detect iOS/iPadOS
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    const isIOSDevice =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.userAgent.includes("Mac") && "ontouchend" in document);
     setIsIOS(isIOSDevice);
   }, []);
@@ -176,7 +177,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       {
         threshold: 0.5, // Trigger when 50% of video is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     const section = document.getElementById("home");
@@ -240,7 +241,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             <>
               {/* Video with WebM and MP4 sources for optimal performance */}
               <video
-                key={`${deviceType}-${isIOS ? 'ios' : 'other'}`}
+                key={`${deviceType}-${isIOS ? "ios" : "other"}`}
                 ref={videoRef}
                 autoPlay
                 loop

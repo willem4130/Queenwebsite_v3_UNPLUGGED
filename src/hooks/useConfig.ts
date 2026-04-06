@@ -511,7 +511,8 @@ export function usePresskit() {
 
   useEffect(() => {
     const fetchPresskit = async () => {
-      const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+      const bandId =
+        process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
       const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
       const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
@@ -533,7 +534,9 @@ export function usePresskit() {
         setPresskit(data.presskit || null);
       } catch (err) {
         console.error("Error loading presskit:", err);
-        setError(err instanceof Error ? err : new Error("Failed to load presskit"));
+        setError(
+          err instanceof Error ? err : new Error("Failed to load presskit"),
+        );
       } finally {
         setLoading(false);
       }
@@ -555,7 +558,8 @@ export function useRiders() {
 
   useEffect(() => {
     const fetchRiders = async () => {
-      const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+      const bandId =
+        process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
       const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
       const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
@@ -577,7 +581,9 @@ export function useRiders() {
         setRiders(data.riders || null);
       } catch (err) {
         console.error("Error loading riders:", err);
-        setError(err instanceof Error ? err : new Error("Failed to load riders"));
+        setError(
+          err instanceof Error ? err : new Error("Failed to load riders"),
+        );
       } finally {
         setLoading(false);
       }
@@ -604,7 +610,8 @@ export function useProData() {
 
   useEffect(() => {
     const fetchProData = async () => {
-      const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+      const bandId =
+        process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
       const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
       const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
@@ -631,7 +638,9 @@ export function useProData() {
         });
       } catch (err) {
         console.error("Error loading pro data:", err);
-        setError(err instanceof Error ? err : new Error("Failed to load pro data"));
+        setError(
+          err instanceof Error ? err : new Error("Failed to load pro data"),
+        );
       } finally {
         setLoading(false);
       }
