@@ -111,7 +111,7 @@ export default async function RootLayout({
     "@type": "MusicGroup",
     name: musicGroup.name || "The Dutch Queen Unplugged",
     url: org.url || SITE_URL,
-    image: `${SITE_URL}${seo?.defaults?.ogImage || "/videos/poster-desktop.jpg"}`,
+    image: `${org.url || SITE_URL}${seo?.defaults?.ogImage || "/videos/poster-desktop.jpg"}`,
     description,
     genre: musicGroup.genre || ["Rock", "Acoustic", "Queen Tribute"],
     foundingDate: musicGroup.foundingDate || "2024",
