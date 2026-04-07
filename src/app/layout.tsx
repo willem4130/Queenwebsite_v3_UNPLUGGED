@@ -139,6 +139,20 @@ export default async function RootLayout({
             __html: JSON.stringify(jsonLd),
           }}
         />
+        {/* Structured Data - WebSite (Schema.org) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: org.name || "The Dutch Queen Unplugged",
+              url: org.url || SITE_URL,
+              description,
+              inLanguage: seo?.geographic?.primaryLocale || "nl-NL",
+            }),
+          }}
+        />
         {/* Google Analytics 4 */}
         {GA_ID && (
           <>
