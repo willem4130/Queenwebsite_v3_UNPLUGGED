@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
+import { siteConfig, bandApiUrl } from "@/lib/site-config";
 
-const BASE_URL = "https://queenunplugged.nl";
-const API_URL =
-  "https://dutch-queen-admin.vercel.app/api/bands/the-dutch-queen-unplugged";
+const BASE_URL = siteConfig.siteUrl;
+const API_URL = bandApiUrl;
 
 const staticEntries: MetadataRoute.Sitemap = [
   {

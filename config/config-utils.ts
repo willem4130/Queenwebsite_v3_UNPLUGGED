@@ -8,14 +8,14 @@
  * 4. Handle Queen Claude integration
  *
  * ARCHITECTURE NOTE:
- * This site is configured as a single-band website for "The Dutch Queen Unplugged".
- * Content is directly imported from the /content/bands/the-dutch-queen-unplugged/ directory.
- * The original multi-band template structure has been removed in favor of this
- * dedicated single-band implementation.
+ * Site identity is configured via environment variables and src/lib/site-config.ts.
+ * Content fallback files are imported from the /content/bands/ directory.
+ * When cloning for a new band, update .env.local and the content directory.
  */
 
 import { BandWebsiteConfig, defaultConfig, genrePresets } from "./band.config";
-// Single-band content imports - hardcoded for The Dutch Queen Unplugged
+import { siteConfig } from "../src/lib/site-config";
+// Content fallback imports (used when CMS API is unavailable)
 import bandProfile from "../content/bands/the-dutch-queen-unplugged/band-profile.json";
 import aboutData from "../content/bands/the-dutch-queen-unplugged/data/about.json";
 // Shows data now loaded from API (see getShowsData function below)
@@ -285,14 +285,14 @@ export async function getBandContentFromAPI(): Promise<{
     address?: string;
   };
 }> {
-  const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+  const bandId = siteConfig.bandId;
   const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
   const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
   if (useCMS && apiUrl) {
     try {
       const response = await fetch(`${apiUrl}/bands/${bandId}`, {
-        cache: "no-store", // Always fetch fresh data
+        next: { revalidate: 300 }, // ISR: refresh every 5 minutes
       });
 
       if (!response.ok) {
@@ -302,7 +302,7 @@ export async function getBandContentFromAPI(): Promise<{
       const data = await response.json();
 
       return {
-        bandName: data.profile?.name || "The Dutch Queen Unplugged",
+        bandName: data.profile?.name || siteConfig.bandName,
         tagline: data.profile?.tagline || "Een ode aan Queen",
         description: {
           short: data.about?.descriptions?.short || "",
@@ -414,7 +414,7 @@ interface ApiShow {
  * Now async to support API fetching
  */
 export async function getShowsData() {
-  const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+  const bandId = siteConfig.bandId;
   const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
   const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
@@ -422,7 +422,7 @@ export async function getShowsData() {
   if (useCMS && apiUrl) {
     try {
       const response = await fetch(`${apiUrl}/bands/${bandId}`, {
-        cache: "no-store", // Always fetch fresh data
+        next: { revalidate: 300 }, // ISR: refresh every 5 minutes
       });
 
       if (!response.ok) {
@@ -541,14 +541,14 @@ export interface GalleryImage {
 export async function getGalleryData(): Promise<{
   images: GalleryImage[];
 }> {
-  const bandId = process.env.NEXT_PUBLIC_BAND_ID || "the-dutch-queen-unplugged";
+  const bandId = siteConfig.bandId;
   const apiUrl = process.env.NEXT_PUBLIC_CMS_API_URL;
   const useCMS = process.env.NEXT_PUBLIC_USE_CMS === "true";
 
   if (useCMS && apiUrl) {
     try {
       const response = await fetch(`${apiUrl}/bands/${bandId}`, {
-        cache: "no-store", // Always fetch fresh data
+        next: { revalidate: 300 }, // ISR: refresh every 5 minutes
       });
 
       if (!response.ok) {

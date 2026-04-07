@@ -6,12 +6,12 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { AnalyticsProvider } from "@/providers/AnalyticsProvider";
 import { CookieConsent } from "@/components/CookieConsent";
+import { siteConfig, bandApiUrl } from "@/lib/site-config";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-const SITE_URL = "https://queenunplugged.nl";
-const API_URL =
-  "https://dutch-queen-admin.vercel.app/api/bands/the-dutch-queen-unplugged";
+const SITE_URL = siteConfig.siteUrl;
+const API_URL = bandApiUrl;
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const defaults = seo?.defaults || {};
   const geo = seo?.geographic || {};
 
-  const title = home.metaTitle || seo?.metaTitle || "The Dutch Queen Unplugged";
+  const title = home.metaTitle || seo?.metaTitle || siteConfig.bandName;
   const description =
     home.metaDescription ||
     seo?.metaDescription ||
@@ -51,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: {
       default: title,
-      template: "%s | The Dutch Queen Unplugged",
+      template: `%s | ${siteConfig.bandName}`,
     },
     description,
     keywords,
@@ -62,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: geo.primaryLocale?.replace("-", "_") || "nl_NL",
       url: SITE_URL,
-      siteName: "The Dutch Queen Unplugged",
+      siteName: siteConfig.bandName,
       title,
       description,
       images: [
@@ -70,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: ogImage,
           width: 1920,
           height: 1080,
-          alt: "The Dutch Queen Unplugged - Akoestische Queen Tribute Band",
+          alt: `${siteConfig.bandName} - Tribute Band`,
         },
       ],
     },
@@ -109,7 +109,7 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
-    name: musicGroup.name || "The Dutch Queen Unplugged",
+    name: musicGroup.name || siteConfig.bandName,
     url: org.url || SITE_URL,
     image: `${org.url || SITE_URL}${seo?.defaults?.ogImage || "/videos/poster-desktop.jpg"}`,
     description,
@@ -146,7 +146,7 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              name: org.name || "The Dutch Queen Unplugged",
+              name: org.name || siteConfig.bandName,
               url: org.url || SITE_URL,
               description,
               inLanguage: seo?.geographic?.primaryLocale || "nl-NL",

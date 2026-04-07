@@ -22,9 +22,11 @@ const navigation = [
   { name: "About", href: "#about" },
 ];
 
-// Domain configuration - update these for production
-const FULLBAND_URL = "https://www.thedutchqueen.com";
-const UNPLUGGED_URL = "https://www.thedutchqueenunplugged.com";
+// Domain configuration loaded from site-config
+import { siteConfig } from "@/lib/site-config";
+
+const FULLBAND_URL = siteConfig.siteToggle.fullbandUrl;
+const UNPLUGGED_URL = siteConfig.siteToggle.unpluggedUrl;
 
 export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
