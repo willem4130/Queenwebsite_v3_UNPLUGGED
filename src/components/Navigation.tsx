@@ -98,6 +98,7 @@ export function Navigation() {
           <div className="hidden items-center space-x-4 xl:flex">
             <a
               href={content.social.facebook || "#"}
+              aria-label="Facebook"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() =>
@@ -114,6 +115,7 @@ export function Navigation() {
             </a>
             <a
               href={content.social.instagram || "#"}
+              aria-label="Instagram"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() =>
@@ -130,6 +132,7 @@ export function Navigation() {
             </a>
             <a
               href={content.social.youtube || "#"}
+              aria-label="YouTube"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() =>
@@ -146,6 +149,7 @@ export function Navigation() {
             </a>
             <a
               href={`mailto:${content.contact.email}`}
+              aria-label="E-mail"
               onClick={() =>
                 trackSocialClick({ platform: "email", location: "navigation" })
               }
@@ -157,6 +161,7 @@ export function Navigation() {
             </a>
             <a
               href={`tel:${content.contact.phone}`}
+              aria-label="Telefoon"
               onClick={() =>
                 trackSocialClick({ platform: "phone", location: "navigation" })
               }
@@ -174,6 +179,8 @@ export function Navigation() {
               type="button"
               className="text-white/60 transition-all duration-300 hover:scale-110 hover:text-white/80"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Menu sluiten" : "Menu openen"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
                 <X
@@ -208,6 +215,7 @@ export function Navigation() {
             <div className="flex items-center justify-center space-x-6 border-t border-white/10 pt-4">
               <a
                 href={content.social.facebook || "#"}
+                aria-label="Facebook"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
@@ -224,6 +232,7 @@ export function Navigation() {
               </a>
               <a
                 href={content.social.instagram || "#"}
+                aria-label="Instagram"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
@@ -240,6 +249,7 @@ export function Navigation() {
               </a>
               <a
                 href={content.social.youtube || "#"}
+                aria-label="YouTube"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
@@ -256,6 +266,7 @@ export function Navigation() {
               </a>
               <a
                 href={`mailto:${content.contact.email}`}
+                aria-label="E-mail"
                 onClick={() =>
                   trackSocialClick({
                     platform: "email",
@@ -270,6 +281,7 @@ export function Navigation() {
               </a>
               <a
                 href={`tel:${content.contact.phone}`}
+                aria-label="Telefoon"
                 onClick={() =>
                   trackSocialClick({
                     platform: "phone",
