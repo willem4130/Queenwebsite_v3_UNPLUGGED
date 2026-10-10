@@ -57,7 +57,7 @@ A push to `main` can also trigger a production deploy. After deploying, load the
 
 ## More docs
 
-The other `*.md` files in this folder are older guides from the original template and may be out of date.
+- [ARCHIVE_SHOWS_GUIDE.md](./ARCHIVE_SHOWS_GUIDE.md): moving past shows from `upcoming` to `past` (`npm run archive-shows`, which runs the script in the sibling `dutch-queen-full-band-v4` folder).
 
 ## Licence
 
